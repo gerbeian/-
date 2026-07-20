@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10001 /* ZhengQiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20001; };
+		A10002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20002; };
+		A10003 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20003; };
+		A10004 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20004; };
+		A10005 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20005; };
+		A10006 /* ZhengQiButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20006; };
+		A10007 /* ZhengQiCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20007; };
+		A10008 /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20008; };
+		A10009 /* CheckInCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20009; };
+		A10010 /* FrostedGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20010; };
+		A10011 /* StatChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20011; };
+		A10012 /* LockPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20012; };
+		A10013 /* QuoteCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20013; };
+		A10014 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20014; };
+		A10015 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20015; };
+		A10016 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20016; };
+		A10017 /* LearnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20017; };
+		A10018 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20018; };
+		A10019 /* ArticleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20019; };
+		A10020 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20020; };
+		A10021 /* TrackItemConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20021; };
+		A10022 /* LockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20022; };
+		A10023 /* LockSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20023; };
+		A10024 /* TrackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20024; };
+		A10025 /* CheckIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20025; };
+		A10026 /* Quote.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20026; };
+		A10027 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20027; };
+		A10028 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20028; };
+		A10029 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20029; };
+		A10030 /* LearnViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20030; };
+		A10031 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20031; };
+		A10032 /* LockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20032; };
+		A10033 /* SeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20033; };
+		A10034 /* ZhengQiCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20034; };
+		A10035 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20035; };
+		A10036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20036; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20001 /* ZhengQiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZhengQiApp.swift; sourceTree = "<group>"; };
+		A20002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20003 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		A20004 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		A20005 /* Shapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
+		A20006 /* ZhengQiButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZhengQiButton.swift; sourceTree = "<group>"; };
+		A20007 /* ZhengQiCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZhengQiCard.swift; sourceTree = "<group>"; };
+		A20008 /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressRing.swift; sourceTree = "<group>"; };
+		A20009 /* CheckInCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInCalendar.swift; sourceTree = "<group>"; };
+		A20010 /* FrostedGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrostedGlass.swift; sourceTree = "<group>"; };
+		A20011 /* StatChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatChart.swift; sourceTree = "<group>"; };
+		A20012 /* LockPatternView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPatternView.swift; sourceTree = "<group>"; };
+		A20013 /* QuoteCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteCard.swift; sourceTree = "<group>"; };
+		A20014 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A20015 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		A20016 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		A20017 /* LearnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnView.swift; sourceTree = "<group>"; };
+		A20018 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A20019 /* ArticleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleDetailView.swift; sourceTree = "<group>"; };
+		A20020 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		A20021 /* TrackItemConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItemConfigView.swift; sourceTree = "<group>"; };
+		A20022 /* LockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockView.swift; sourceTree = "<group>"; };
+		A20023 /* LockSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSetupView.swift; sourceTree = "<group>"; };
+		A20024 /* TrackItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackItem.swift; sourceTree = "<group>"; };
+		A20025 /* CheckIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIn.swift; sourceTree = "<group>"; };
+		A20026 /* Quote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quote.swift; sourceTree = "<group>"; };
+		A20027 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		A20028 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		A20029 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		A20030 /* LearnViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnViewModel.swift; sourceTree = "<group>"; };
+		A20031 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		A20032 /* LockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockViewModel.swift; sourceTree = "<group>"; };
+		A20033 /* SeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataService.swift; sourceTree = "<group>"; };
+		A20034 /* ZhengQiCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZhengQiCalculator.swift; sourceTree = "<group>"; };
+		A20035 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		A20036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20037 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A30001 /* ZhengQi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZhengQi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A40001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A50001 = {
+			isa = PBXGroup;
+			children = (
+				A50002 /* ZhengQi */,
+				A50003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A50002 /* ZhengQi */ = {
+			isa = PBXGroup;
+			children = (
+				A20001 /* ZhengQiApp.swift */,
+				A20002 /* ContentView.swift */,
+				A20037 /* Info.plist */,
+				A50004 /* Theme */,
+				A50005 /* Components */,
+				A50006 /* Views */,
+				A50007 /* Models */,
+				A50008 /* ViewModels */,
+				A50009 /* Services */,
+				A20036 /* Assets.xcassets */,
+			);
+			path = ZhengQi;
+			sourceTree = "<group>";
+		};
+		A50003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A30001 /* ZhengQi.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A50004 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				A20003 /* Colors.swift */,
+				A20004 /* Typography.swift */,
+				A20005 /* Shapes.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		A50005 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A20006 /* ZhengQiButton.swift */,
+				A20007 /* ZhengQiCard.swift */,
+				A20008 /* ProgressRing.swift */,
+				A20009 /* CheckInCalendar.swift */,
+				A20010 /* FrostedGlass.swift */,
+				A20011 /* StatChart.swift */,
+				A20012 /* LockPatternView.swift */,
+				A20013 /* QuoteCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A50006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A20014 /* HomeView.swift */,
+				A20015 /* CalendarView.swift */,
+				A20016 /* CommunityView.swift */,
+				A20017 /* LearnView.swift */,
+				A20018 /* ProfileView.swift */,
+				A20019 /* ArticleDetailView.swift */,
+				A20020 /* StatisticsView.swift */,
+				A20021 /* TrackItemConfigView.swift */,
+				A20022 /* LockView.swift */,
+				A20023 /* LockSetupView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A50007 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A20024 /* TrackItem.swift */,
+				A20025 /* CheckIn.swift */,
+				A20026 /* Quote.swift */,
+				A20027 /* Article.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A50008 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A20028 /* HomeViewModel.swift */,
+				A20029 /* CalendarViewModel.swift */,
+				A20030 /* LearnViewModel.swift */,
+				A20031 /* ProfileViewModel.swift */,
+				A20032 /* LockViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A50009 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A20033 /* SeedDataService.swift */,
+				A20034 /* ZhengQiCalculator.swift */,
+				A20035 /* KeychainManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A60001 /* ZhengQi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A80001;
+			buildPhases = (
+				A40001 /* Frameworks */,
+				A70001 /* Resources */,
+				A70002 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZhengQi;
+			productName = ZhengQi;
+			productReference = A30001 /* ZhengQi.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A00001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A60001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A80002;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				"zh-Hans",
+				Base,
+			);
+			mainGroup = A50001;
+			productRefGroup = A50003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A60001 /* ZhengQi */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A70001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10036 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70002 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10001 /* ZhengQiApp.swift in Sources */,
+				A10002 /* ContentView.swift in Sources */,
+				A10003 /* Colors.swift in Sources */,
+				A10004 /* Typography.swift in Sources */,
+				A10005 /* Shapes.swift in Sources */,
+				A10006 /* ZhengQiButton.swift in Sources */,
+				A10007 /* ZhengQiCard.swift in Sources */,
+				A10008 /* ProgressRing.swift in Sources */,
+				A10009 /* CheckInCalendar.swift in Sources */,
+				A10010 /* FrostedGlass.swift in Sources */,
+				A10011 /* StatChart.swift in Sources */,
+				A10012 /* LockPatternView.swift in Sources */,
+				A10013 /* QuoteCard.swift in Sources */,
+				A10014 /* HomeView.swift in Sources */,
+				A10015 /* CalendarView.swift in Sources */,
+				A10016 /* CommunityView.swift in Sources */,
+				A10017 /* LearnView.swift in Sources */,
+				A10018 /* ProfileView.swift in Sources */,
+				A10019 /* ArticleDetailView.swift in Sources */,
+				A10020 /* StatisticsView.swift in Sources */,
+				A10021 /* TrackItemConfigView.swift in Sources */,
+				A10022 /* LockView.swift in Sources */,
+				A10023 /* LockSetupView.swift in Sources */,
+				A10024 /* TrackItem.swift in Sources */,
+				A10025 /* CheckIn.swift in Sources */,
+				A10026 /* Quote.swift in Sources */,
+				A10027 /* Article.swift in Sources */,
+				A10028 /* HomeViewModel.swift in Sources */,
+				A10029 /* CalendarViewModel.swift in Sources */,
+				A10030 /* LearnViewModel.swift in Sources */,
+				A10031 /* ProfileViewModel.swift in Sources */,
+				A10032 /* LockViewModel.swift in Sources */,
+				A10033 /* SeedDataService.swift in Sources */,
+				A10034 /* ZhengQiCalculator.swift in Sources */,
+				A10035 /* KeychainManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A90001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A90002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A90003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZhengQi/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhengqi.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A90004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ZhengQi/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhengqi.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A80001 /* Build configuration list for PBXNativeTarget "ZhengQi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90003 /* Debug */,
+				A90004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80002 /* Build configuration list for PBXProject "ZhengQi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90001 /* Debug */,
+				A90002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A00001 /* Project object */;
+}

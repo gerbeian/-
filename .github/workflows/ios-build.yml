@@ -1,0 +1,88 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'ios/**'
+      - '.github/workflows/ios-build.yml'
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Build configuration'
+        required: true
+        default: 'Debug'
+        type: choice
+        options:
+          - Debug
+          - Release
+
+jobs:
+  build-ipa:
+    name: Build iOS IPA
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        run: |
+          sudo xcode-select -s /Applications/Xcode_15.4.app
+          xcodebuild -version
+
+      - name: Install xcpretty
+        run: gem install xcpretty
+
+      - name: Build archive
+        run: |
+          cd ios
+          xcodebuild archive \
+            -project ZhengQi.xcodeproj \
+            -scheme ZhengQi \
+            -sdk iphoneos \
+            -configuration ${{ inputs.configuration || 'Debug' }} \
+            -archivePath ${{ github.workspace }}/build/ZhengQi.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            2>&1 | xcpretty && exit ${PIPESTATUS[0]}
+
+      - name: Export IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath ${{ github.workspace }}/build/ZhengQi.xcarchive \
+            -exportPath ${{ github.workspace }}/build \
+            -exportOptionsPlist ios/exportOptions.plist \
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | xcpretty && exit ${PIPESTATUS[0]}
+
+      - name: Rename IPA
+        run: |
+          IPA_FILE=$(find ${{ github.workspace }}/build -name "*.ipa" | head -1)
+          if [ -z "$IPA_FILE" ]; then
+            echo "No IPA found, trying to create manually..."
+            mkdir -p ${{ github.workspace }}/build/Payload
+            cp -R ${{ github.workspace }}/build/ZhengQi.xcarchive/Products/Applications/ZhengQi.app ${{ github.workspace }}/build/Payload/
+            cd ${{ github.workspace }}/build
+            zip -r ZhengQi.ipa Payload
+            IPA_FILE=${{ github.workspace }}/build/ZhengQi.ipa
+          fi
+          echo "IPA_FILE=$IPA_FILE" >> $GITHUB_ENV
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 正气-iOS-${{ inputs.configuration || 'Debug' }}
+          path: ${{ github.workspace }}/build/*.ipa
+          retention-days: 30
+
+      - name: Build summary
+        run: |
+          echo "## 正气 iOS Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Configuration:** ${{ inputs.configuration || 'Debug' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**IPA Location:** Artifacts → 正气-iOS-${{ inputs.configuration || 'Debug' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> 注意：此 IPA 未签名，需通过 AltStore / Sideloadly 等工具安装" >> $GITHUB_STEP_SUMMARY

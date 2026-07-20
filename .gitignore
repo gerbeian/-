@@ -1,0 +1,36 @@
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/*.apk
+android/*.aab
+android/.idea/
+android/*.iml
+android/gradle-8.7/
+
+# iOS
+ios/*.xcworkspace/
+ios/Pods/
+ios/build/
+ios/DerivedData/
+ios/*.ipa
+ios/ZhengQi.xcodeproj/xcuserdata/
+ios/ZhengQi.xcodeproj/project.xcworkspace/
+
+# Gradle
+.gradle/
+*.apk
+*.aab
+*.ipa
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

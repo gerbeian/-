@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_blue">#0066cc</color>
+    <color name="primary_focus">#0071e3</color>
+    <color name="primary_on_dark">#2997ff</color>
+    <color name="ink">#1d1d1f</color>
+    <color name="body_on_dark">#ffffff</color>
+    <color name="body_muted">#cccccc</color>
+    <color name="ink_muted_80">#333333</color>
+    <color name="ink_muted_48">#7a7a7a</color>
+    <color name="divider_soft">#f0f0f0</color>
+    <color name="hairline">#e0e0e0</color>
+    <color name="canvas_white">#ffffff</color>
+    <color name="canvas_parchment">#f5f5f7</color>
+    <color name="surface_pearl">#fafafc</color>
+    <color name="surface_tile_1">#272729</color>
+    <color name="surface_tile_2">#2a2a2c</color>
+    <color name="surface_tile_3">#252527</color>
+    <color name="surface_black">#000000</color>
+    <color name="status_green">#34c759</color>
+    <color name="status_yellow">#ffcc00</color>
+    <color name="status_gray">#d1d1d6</color>
+</resources>
