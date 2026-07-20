@@ -26,7 +26,7 @@ fun WeeklyBarChart(
     modifier: Modifier = Modifier
 ) {
     if (data.isEmpty()) {
-        LayoutBox(modifier = modifier.fillMaxWidth().height(200.dp)) {
+        Box(modifier = modifier.fillMaxWidth().height(200.dp)) {
             Text(
                 text = "暂无数据",
                 modifier = Modifier.fillMaxSize().wrapContentSize(),
@@ -93,7 +93,7 @@ fun MonthlyLineChart(
     modifier: Modifier = Modifier
 ) {
     if (data.isEmpty()) {
-        LayoutBox(modifier = modifier.fillMaxWidth().height(200.dp)) {
+        Box(modifier = modifier.fillMaxWidth().height(200.dp)) {
             Text(
                 text = "暂无数据",
                 modifier = Modifier.fillMaxSize().wrapContentSize(),
