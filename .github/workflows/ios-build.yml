@@ -73,31 +73,13 @@ jobs:
           path: ${{ github.workspace }}/build/xcodebuild.log
           retention-days: 7
 
-      - name: Export IPA
-        continue-on-error: true
-        run: |
-          xcodebuild -exportArchive \
-            -archivePath ${{ github.workspace }}/build/ZhengQi.xcarchive \
-            -exportPath ${{ github.workspace }}/build \
-            -exportOptionsPlist ios/exportOptions.plist \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            DEVELOPMENT_TEAM="" \
-            2>&1 | xcpretty && exit ${PIPESTATUS[0]}
-
       - name: Create IPA from xcarchive
-        if: always()
         run: |
-          IPA_FILE=$(find ${{ github.workspace }}/build -name "*.ipa" | head -1)
-          if [ -z "$IPA_FILE" ]; then
-            echo "Export failed, creating IPA manually from xcarchive..."
-            mkdir -p ${{ github.workspace }}/build/Payload
-            cp -R ${{ github.workspace }}/build/ZhengQi.xcarchive/Products/Applications/ZhengQi.app ${{ github.workspace }}/build/Payload/
-            cd ${{ github.workspace }}/build
-            zip -r ZhengQi.ipa Payload
-            IPA_FILE=${{ github.workspace }}/build/ZhengQi.ipa
-          fi
+          mkdir -p ${{ github.workspace }}/build/Payload
+          cp -R ${{ github.workspace }}/build/ZhengQi.xcarchive/Products/Applications/ZhengQi.app ${{ github.workspace }}/build/Payload/
+          cd ${{ github.workspace }}/build
+          zip -r ZhengQi.ipa Payload
+          IPA_FILE=${{ github.workspace }}/build/ZhengQi.ipa
           echo "IPA_FILE=$IPA_FILE" >> $GITHUB_ENV
 
       - name: Upload IPA artifact
