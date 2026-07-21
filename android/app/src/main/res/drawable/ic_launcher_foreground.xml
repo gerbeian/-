@@ -5,95 +5,14 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Hexagonal shield outline -->
+    <!-- 极简盾牌轮廓 — 保护、自律 -->
     <path
-        android:pathData="M54,16 L80,30 L80,56 C80,72 66,82 54,86 C42,82 28,72 28,56 L28,30 Z"
+        android:pathData="M54,28 C66,32 72,38 72,50 C72,64 62,74 54,80 C46,74 36,64 36,50 C36,38 42,32 54,28 Z"
         android:strokeColor="#FFFFFF"
-        android:strokeWidth="1.5"
-        android:fillColor="#00000000"
-        android:strokeAlpha="0.35" />
-
-    <!-- 6 outer lotus petals -->
-    <group android:pivotX="54" android:pivotY="54">
-        <group android:rotation="0">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.92" />
-        </group>
-        <group android:rotation="60">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.88" />
-        </group>
-        <group android:rotation="120">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.84" />
-        </group>
-        <group android:rotation="180">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.88" />
-        </group>
-        <group android:rotation="240">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.84" />
-        </group>
-        <group android:rotation="300">
-            <path
-                android:pathData="M54,54 C38,38 38,20 54,14 C70,20 70,38 54,54 Z"
-                android:fillColor="#FFFFFF"
-                android:fillAlpha="0.88" />
-        </group>
-
-        <!-- 6 inner smaller petals (offset by 30°) -->
-        <group android:rotation="30">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.75" />
-        </group>
-        <group android:rotation="90">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.70" />
-        </group>
-        <group android:rotation="150">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.65" />
-        </group>
-        <group android:rotation="210">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.70" />
-        </group>
-        <group android:rotation="270">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.65" />
-        </group>
-        <group android:rotation="330">
-            <path
-                android:pathData="M54,54 C46,46 46,34 54,30 C62,34 62,46 54,54 Z"
-                android:fillColor="#A5B4FC"
-                android:fillAlpha="0.70" />
-        </group>
-
-        <!-- Center jewel -->
-        <path
-            android:pathData="M54,47 A6,6 0 1,1 53.99,47"
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.95" />
-    </group>
+        android:strokeWidth="4"
+        android:fillColor="#00000000" />
+    <!-- 中心圆点 — 正气之核 -->
+    <path
+        android:pathData="M54,48 A8,8 0 1,1 53.99,48 Z"
+        android:fillColor="#FFFFFF" />
 </vector>
