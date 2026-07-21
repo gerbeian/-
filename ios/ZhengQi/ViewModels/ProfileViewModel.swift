@@ -13,9 +13,20 @@ class ProfileViewModel {
     var trackItems: [TrackItem] = []
     var exportResult: String?
 
-    @AppStorage("userNickname") var storedNickname: String = "正气少年"
-    @AppStorage("lockEnabled") var lockEnabled: Bool = false
-    @AppStorage("avatarColorHex") var avatarColorHex: String = "0066cc"
+    private let defaults = UserDefaults.standard
+
+    var storedNickname: String {
+        get { defaults.string(forKey: "userNickname") ?? "正气少年" }
+        set { defaults.set(newValue, forKey: "userNickname") }
+    }
+    var lockEnabled: Bool {
+        get { defaults.bool(forKey: "lockEnabled") }
+        set { defaults.set(newValue, forKey: "lockEnabled") }
+    }
+    var avatarColorHex: String {
+        get { defaults.string(forKey: "avatarColorHex") ?? "0066cc" }
+        set { defaults.set(newValue, forKey: "avatarColorHex") }
+    }
 
     var level: (name: String, icon: String) {
         ZhengQiCalculator.getLevel(score: zhengQiScore)

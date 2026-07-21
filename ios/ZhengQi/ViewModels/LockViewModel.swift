@@ -3,7 +3,12 @@ import SwiftUI
 
 @Observable
 class LockViewModel {
-    @AppStorage("lockEnabled") var lockEnabled: Bool = false
+    private let defaults = UserDefaults.standard
+
+    var lockEnabled: Bool {
+        get { defaults.bool(forKey: "lockEnabled") }
+        set { defaults.set(newValue, forKey: "lockEnabled") }
+    }
     var isLocked: Bool = false
     var enteredPasscode: String = ""
     var errorMessage: String = ""
