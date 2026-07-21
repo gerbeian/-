@@ -2,9 +2,9 @@ import SwiftUI
 
 struct ZhengQiButton: View {
     let title: String
-    let action: () -> Void
     var isPrimary: Bool = true
     var isDisabled: Bool = false
+    let action: () -> Void
 
     var body: some View {
         Button(action: action) {
