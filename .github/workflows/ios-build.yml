@@ -74,20 +74,24 @@ jobs:
           retention-days: 7
 
       - name: Export IPA
+        continue-on-error: true
         run: |
           xcodebuild -exportArchive \
             -archivePath ${{ github.workspace }}/build/ZhengQi.xcarchive \
             -exportPath ${{ github.workspace }}/build \
             -exportOptionsPlist ios/exportOptions.plist \
             CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
             2>&1 | xcpretty && exit ${PIPESTATUS[0]}
 
-      - name: Rename IPA
+      - name: Create IPA from xcarchive
         if: always()
         run: |
           IPA_FILE=$(find ${{ github.workspace }}/build -name "*.ipa" | head -1)
           if [ -z "$IPA_FILE" ]; then
-            echo "No IPA found, trying to create manually..."
+            echo "Export failed, creating IPA manually from xcarchive..."
             mkdir -p ${{ github.workspace }}/build/Payload
             cp -R ${{ github.workspace }}/build/ZhengQi.xcarchive/Products/Applications/ZhengQi.app ${{ github.workspace }}/build/Payload/
             cd ${{ github.workspace }}/build
