@@ -58,10 +58,9 @@ class HomeViewModel {
     func toggleCheckIn(for item: TrackItem, context: ModelContext) {
         let today = dateFormatter.string(from: Date())
 
-        let desc = FetchDescriptor<CheckIn>(
-            predicate: #Predicate { $0.date == today && $0.trackItem?.id == item.id }
-        )
-        let existing = (try? context.fetch(desc)) ?? []
+        let desc = FetchDescriptor<CheckIn>(predicate: #Predicate { $0.date == today })
+        let todayCheckIns = (try? context.fetch(desc)) ?? []
+        let existing = todayCheckIns.filter { $0.trackItem?.id == item.id }
 
         if let checkIn = existing.first {
             checkIn.status.toggle()
@@ -84,10 +83,9 @@ class HomeViewModel {
         }
 
         for itemId in trackItemIds {
-            let desc = FetchDescriptor<CheckIn>(
-                predicate: #Predicate { $0.date == today && $0.trackItem?.id == itemId }
-            )
-            let existing = (try? context.fetch(desc)) ?? []
+            let desc = FetchDescriptor<CheckIn>(predicate: #Predicate { $0.date == today })
+            let todayCheckIns = (try? context.fetch(desc)) ?? []
+            let existing = todayCheckIns.filter { $0.trackItem?.id == itemId }
 
             if let checkIn = existing.first {
                 checkIn.status = true
