@@ -72,6 +72,7 @@ class ProfileViewModel {
         storedNickname = nickname
     }
 
+    @MainActor
     func deleteAllData(context: ModelContext) {
         do {
             try context.delete(model: CheckIn.self)
