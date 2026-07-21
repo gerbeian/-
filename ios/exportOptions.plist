@@ -4,6 +4,8 @@
 <dict>
 	<key>method</key>
 	<string>development</string>
+	<key>teamID</key>
+	<string>ABCDEFGHIJ</string>
 	<key>compileBitcode</key>
 	<false/>
 	<key>stripSwiftSymbols</key>

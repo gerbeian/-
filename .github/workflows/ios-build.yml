@@ -48,6 +48,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="ABCDEFGHIJ" \
             2>&1 | tee ${{ github.workspace }}/build/xcodebuild.log
           EXIT_CODE=$?
           if [ $EXIT_CODE -ne 0 ]; then
@@ -82,6 +83,7 @@ jobs:
             2>&1 | xcpretty && exit ${PIPESTATUS[0]}
 
       - name: Rename IPA
+        if: always()
         run: |
           IPA_FILE=$(find ${{ github.workspace }}/build -name "*.ipa" | head -1)
           if [ -z "$IPA_FILE" ]; then
@@ -95,6 +97,7 @@ jobs:
           echo "IPA_FILE=$IPA_FILE" >> $GITHUB_ENV
 
       - name: Upload IPA artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: 正气-iOS-${{ inputs.configuration || 'Debug' }}
@@ -102,6 +105,7 @@ jobs:
           retention-days: 30
 
       - name: Build summary
+        if: always()
         run: |
           echo "## 正气 iOS Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "**Configuration:** ${{ inputs.configuration || 'Debug' }}" >> $GITHUB_STEP_SUMMARY
