@@ -1,6 +1,7 @@
 package com.zhengqi.app.viewmodel
 
 import android.app.Application
+import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.zhengqi.app.data.local.AppDatabase
@@ -8,6 +9,9 @@ import com.zhengqi.app.data.model.TrackItem
 import com.zhengqi.app.data.repository.CheckInRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -35,6 +39,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     private val _yearlyData = MutableStateFlow<Map<String, Int>>(emptyMap())
     val yearlyData: StateFlow<Map<String, Int>> = _yearlyData.asStateFlow()
+
+    private val _exportResult = MutableStateFlow<String?>(null)
+    val exportResult: StateFlow<String?> = _exportResult.asStateFlow()
 
     init {
         loadData()
@@ -125,5 +132,41 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             repository.deleteAllData()
             loadData()
         }
+    }
+
+    fun exportData() {
+        viewModelScope.launch {
+            try {
+                val checkIns = repository.getAllCheckIns()
+                val trackItems = repository.getAllTrackItems()
+                val trackItemMap = trackItems.associateBy { it.id }
+
+                val jsonArray = JSONArray()
+                for (checkIn in checkIns) {
+                    val obj = JSONObject()
+                    obj.put("date", checkIn.date)
+                    obj.put("trackItem", trackItemMap[checkIn.trackItemId]?.name ?: "未知")
+                    obj.put("status", checkIn.status)
+                    obj.put("note", checkIn.note)
+                    if (checkIn.imageUri.isNotEmpty()) {
+                        obj.put("imageUri", checkIn.imageUri)
+                    }
+                    jsonArray.put(obj)
+                }
+
+                val downloadsDir = getApplication<Application>().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+                    ?: getApplication<Application>().filesDir
+                val file = File(downloadsDir, "正气_打卡数据_${LocalDate.now()}.json")
+                file.writeText(jsonArray.toString(2))
+
+                _exportResult.value = "导出成功：${file.absolutePath}"
+            } catch (e: Exception) {
+                _exportResult.value = "导出失败：${e.message}"
+            }
+        }
+    }
+
+    fun clearExportResult() {
+        _exportResult.value = null
     }
 }

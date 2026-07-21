@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -22,17 +23,17 @@ fun MainScreen(
     onNavigateToStatistics: () -> Unit,
     onNavigateToTrackConfig: () -> Unit,
     onNavigateToLockSetup: () -> Unit,
-    onNavigateToAbout: () -> Unit
+    onNavigateToAbout: () -> Unit,
+    onNavigateToEmergency: () -> Unit
 ) {
     val navItems = listOf(
         BottomNavItem("首页", Icons.Default.Home, "home"),
         BottomNavItem("日历", Icons.Default.CalendarMonth, "calendar"),
-        BottomNavItem("社区", Icons.Default.Groups, "community"),
         BottomNavItem("学习", Icons.Default.MenuBook, "learn"),
         BottomNavItem("我的", Icons.Default.Person, "profile")
     )
 
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
@@ -73,14 +74,14 @@ fun MainScreen(
             when (selectedTab) {
                 0 -> HomeScreen(
                     onNavigateToTrackConfig = onNavigateToTrackConfig,
-                    onNavigateToArticleDetail = onNavigateToArticleDetail
+                    onNavigateToArticleDetail = onNavigateToArticleDetail,
+                    onNavigateToEmergency = onNavigateToEmergency
                 )
                 1 -> CalendarScreen()
-                2 -> CommunityScreen()
-                3 -> LearnScreen(
+                2 -> LearnScreen(
                     onArticleClick = onNavigateToArticleDetail
                 )
-                4 -> ProfileScreen(
+                3 -> ProfileScreen(
                     onNavigateToStatistics = onNavigateToStatistics,
                     onNavigateToTrackConfig = onNavigateToTrackConfig,
                     onNavigateToLockSetup = onNavigateToLockSetup,

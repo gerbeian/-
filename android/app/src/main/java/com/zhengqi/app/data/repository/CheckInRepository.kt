@@ -17,15 +17,17 @@ class CheckInRepository(
 
     suspend fun getAllTrackItems(): List<TrackItem> = trackItemDao.getAllActive().first()
 
+    suspend fun getAllCheckIns(): List<CheckIn> = checkInDao.getAllCheckIns()
+
     suspend fun getCheckInsForDate(date: String): List<CheckIn> = checkInDao.getCheckInsByDate(date)
 
-    suspend fun toggleCheckIn(trackItemId: Long, date: String): Boolean {
+    suspend fun toggleCheckIn(trackItemId: Long, date: String, note: String = "", imageUri: String = ""): Boolean {
         val existing = checkInDao.getCheckIn(date, trackItemId)
         if (existing != null) {
             checkInDao.deleteByDateAndTrack(date, trackItemId)
             return false
         } else {
-            checkInDao.insert(CheckIn(trackItemId = trackItemId, date = date, status = true))
+            checkInDao.insert(CheckIn(trackItemId = trackItemId, date = date, status = true, note = note, imageUri = imageUri))
             return true
         }
     }
@@ -39,9 +41,23 @@ class CheckInRepository(
         }
     }
 
+    suspend fun batchCheckIn(trackItemIds: List<Long>, date: String, note: String, imageUri: String) {
+        for (trackItemId in trackItemIds) {
+            checkIn(trackItemId, date, note)
+            if (imageUri.isNotEmpty()) {
+                val existing = checkInDao.getCheckIn(date, trackItemId)
+                existing?.let {
+                    checkInDao.update(it.copy(imageUri = imageUri))
+                }
+            }
+        }
+    }
+
     suspend fun uncheckIn(trackItemId: Long, date: String) {
         checkInDao.deleteByDateAndTrack(date, trackItemId)
     }
+
+    suspend fun updateCheckIn(checkIn: CheckIn) = checkInDao.update(checkIn)
 
     suspend fun getTotalCheckInDays(): Int = checkInDao.getTotalCheckInDays()
 

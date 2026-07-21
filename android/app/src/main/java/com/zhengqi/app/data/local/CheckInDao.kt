@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CheckInDao {
+    @Query("SELECT * FROM check_ins ORDER BY date DESC")
+    suspend fun getAllCheckIns(): List<CheckIn>
+
     @Query("SELECT * FROM check_ins WHERE date = :date ORDER BY createdAt DESC")
     suspend fun getCheckInsByDate(date: String): List<CheckIn>
 

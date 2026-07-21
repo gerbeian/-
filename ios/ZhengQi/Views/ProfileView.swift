@@ -6,6 +6,7 @@ struct ProfileView: View {
     @State private var viewModel = ProfileViewModel()
     @State private var showEditNickname = false
     @State private var showClearAlert = false
+    @State private var showExportResult = false
     @State private var editedNickname = ""
 
     var body: some View {
@@ -13,10 +14,10 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: ZQSpacing.lg) {
                     profileHeader
-                    scoreCard
-                    statsEntry
-                    settingsSection
-                    aboutSection
+                    statsRow
+                    functionsSection
+                    dataSection
+                    otherSection
                     Spacer().frame(height: ZQSpacing.section)
                 }
                 .padding(.horizontal, ZQSpacing.lg)
@@ -31,200 +32,147 @@ struct ProfileView: View {
             .alert("确认清除", isPresented: $showClearAlert) {
                 Button("取消", role: .cancel) {}
                 Button("清除", role: .destructive) {
-                    viewModel.clearAllData(context: modelContext)
+                    viewModel.deleteAllData(context: modelContext)
                     viewModel.loadData(context: modelContext)
                 }
             } message: {
-                Text("将清除所有数据并恢复默认设置，此操作不可撤销。")
+                Text("此操作将删除所有打卡记录，且不可恢复。确定要继续吗？")
+            }
+            .alert(viewModel.exportResult?.contains("成功") == true ? "导出成功" : "导出失败", isPresented: $showExportResult) {
+                Button("确定") { viewModel.clearExportResult() }
+            } message: {
+                Text(viewModel.exportResult ?? "")
+            }
+            .onChange(of: viewModel.exportResult) { _, newValue in
+                if newValue != nil { showExportResult = true }
             }
         }
     }
 
+    // MARK: - Profile Header (白底 + hairline 边框)
     private var profileHeader: some View {
-        VStack(spacing: ZQSpacing.md) {
-            ZStack {
-                Circle()
-                    .fill(viewModel.avatarColor)
-                    .frame(width: 72, height: 72)
+        HStack(spacing: 16) {
+            // Avatar
+            Image(systemName: "person.crop.circle.fill")
+                .font(.system(size: 48))
+                .foregroundColor(.primaryBlue)
+                .frame(width: 56, height: 56)
+                .background(Circle().fill(Color.primaryBlue.opacity(0.1)))
+                .overlay(
+                    Circle()
+                        .stroke(Color.hairline, lineWidth: 1)
+                )
 
-                Text(String(viewModel.nickname.prefix(1)))
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(.white)
-            }
-
-            Button(action: {
-                editedNickname = viewModel.nickname
-                showEditNickname = true
-            }) {
-                HStack(spacing: ZQSpacing.xxs) {
-                    Text(viewModel.nickname)
-                        .font(.zqTitle2)
-                    Image(systemName: "pencil")
-                        .font(.system(size: 13))
-                        .foregroundColor(.primaryBlue)
-                }
-            }
-
-            HStack(spacing: ZQSpacing.xs) {
-                Image(systemName: viewModel.level.icon)
-                    .font(.system(size: 14))
+            VStack(alignment: .leading, spacing: 2) {
                 Text(viewModel.level.name)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
+                Text("正气值 \(viewModel.zhengQiScore) · 连续 \(viewModel.consecutiveDays) 天")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
             }
-            .foregroundColor(.primaryBlue)
-            .padding(.horizontal, ZQSpacing.md)
-            .padding(.vertical, ZQSpacing.xs)
-            .background(
-                RoundedRectangle(cornerRadius: ZQRounded.pill)
-                    .fill(Color.primaryBlue.opacity(0.1))
-            )
         }
-        .frame(maxWidth: .infinity)
-        .padding(.top, ZQSpacing.md)
-    }
-
-    private var scoreCard: some View {
-        HStack(spacing: ZQSpacing.lg) {
-            statItem(value: "\(viewModel.zhengQiScore)", label: "正气值", color: .primaryBlue)
-            Divider().frame(height: 40).background(Color.hairline)
-            statItem(value: "\(viewModel.consecutiveDays)", label: "连续天数", color: .ink)
-            Divider().frame(height: 40).background(Color.hairline)
-            statItem(value: "\(viewModel.totalCheckInDays)", label: "总打卡", color: .ink)
-        }
-        .padding(ZQSpacing.lg)
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: ZQRounded.lg)
-                .fill(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.canvas)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.hairline, lineWidth: 1)
         )
     }
 
-    private func statItem(value: String, label: String, color: Color) -> some View {
-        VStack(spacing: ZQSpacing.xxs) {
-            Text(value)
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(color)
-            Text(label)
-                .font(.zqSubtitle)
+    // MARK: - Stats Row
+    private var statsRow: some View {
+        HStack(spacing: 0) {
+            ProfileStatItem(label: "正气值", value: "\(viewModel.zhengQiScore)", icon: "star.fill")
+            ProfileStatItem(label: "连续天数", value: "\(viewModel.consecutiveDays)", icon: "flame.fill")
+            ProfileStatItem(label: "总打卡", value: "\(viewModel.totalCheckInDays)", icon: "checkmark.circle.fill")
         }
-        .frame(maxWidth: .infinity)
     }
 
-    private var statsEntry: some View {
-        NavigationLink(destination: StatisticsView()) {
-            HStack {
-                Image(systemName: "chart.bar.fill")
-                    .foregroundColor(.primaryBlue)
-                    .font(.system(size: 18))
-                Text("统计图表")
-                    .font(.zqBody)
-                    .foregroundColor(.ink)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundColor(.inkMuted48)
+    // MARK: - Functions Section
+    private var functionsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("功能")
+                .font(.system(size: 20, weight: .semibold))
+
+            NavigationLink(destination: StatisticsView()) {
+                ProfileMenuItemRow(
+                    icon: "chart.bar.fill",
+                    title: "统计图表",
+                    subtitle: "周频率 / 月视图 / 年视图"
+                )
             }
-            .padding(ZQSpacing.lg)
-            .background(
-                RoundedRectangle(cornerRadius: ZQRounded.lg)
-                    .fill(.ultraThinMaterial)
+            .buttonStyle(.plain)
+
+            NavigationLink(destination: TrackItemConfigView()) {
+                ProfileMenuItemRow(
+                    icon: "square.and.pencil",
+                    title: "追踪项配置",
+                    subtitle: "自定义你的打卡项目"
+                )
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink(destination: LockSetupView()) {
+                ProfileMenuItemRow(
+                    icon: "lock.shield",
+                    title: "密码锁设置",
+                    subtitle: "手势密码 / 数字密码"
+                )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Data Section
+    private var dataSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("数据")
+                .font(.system(size: 20, weight: .semibold))
+
+            Button {
+                viewModel.exportData(context: modelContext)
+            } label: {
+                ProfileMenuItemRow(
+                    icon: "square.and.arrow.down",
+                    title: "导出数据",
+                    subtitle: "将打卡数据导出为 JSON 文件"
+                )
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showClearAlert = true
+            } label: {
+                ProfileMenuItemRow(
+                    icon: "trash",
+                    title: "清除数据",
+                    subtitle: "删除所有打卡记录",
+                    isDanger: true
+                )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Other Section
+    private var otherSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("其他")
+                .font(.system(size: 20, weight: .semibold))
+
+            ProfileMenuItemRow(
+                icon: "info.circle",
+                title: "关于",
+                subtitle: "版本 1.0.0"
             )
         }
-        .buttonStyle(.plain)
     }
 
-    private var settingsSection: some View {
-        VStack(alignment: .leading, spacing: ZQSpacing.md) {
-            Text("设置")
-                .font(.zqTitle2)
-
-            VStack(spacing: 0) {
-                NavigationLink(destination: TrackItemConfigView()) {
-                    ZhengQiTile {
-                        HStack {
-                            Image(systemName: "list.bullet.clipboard")
-                                .foregroundColor(.primaryBlue)
-                                .frame(width: 24)
-                            Text("打卡项目配置")
-                                .font(.zqBody)
-                                .foregroundColor(.ink)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.inkMuted48)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-
-                NavigationLink(destination: LockSetupView()) {
-                    ZhengQiTile(isAlternate: true) {
-                        HStack {
-                            Image(systemName: "lock.shield")
-                                .foregroundColor(.primaryBlue)
-                                .frame(width: 24)
-                            Text("密码锁")
-                                .font(.zqBody)
-                                .foregroundColor(.ink)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.inkMuted48)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-
-                Button(action: { showClearAlert = true }) {
-                    ZhengQiTile(isAlternate: false) {
-                        HStack {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-                                .frame(width: 24)
-                            Text("清除数据")
-                                .font(.zqBody)
-                                .foregroundColor(.red)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.inkMuted48)
-                        }
-                    }
-                }
-                .buttonStyle(.plain)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: ZQRounded.lg))
-        }
-    }
-
-    private var aboutSection: some View {
-        VStack(alignment: .leading, spacing: ZQSpacing.md) {
-            Text("关于")
-                .font(.zqTitle2)
-
-            VStack(spacing: 0) {
-                ZhengQiTile {
-                    HStack {
-                        Text("版本")
-                            .font(.zqBody)
-                        Spacer()
-                        Text("1.0.0")
-                            .font(.zqCaption)
-                    }
-                }
-                ZhengQiTile(isAlternate: true) {
-                    HStack {
-                        Text("正气")
-                            .font(.zqBody)
-                        Spacer()
-                        Text("修身养性，正气存内")
-                            .font(.zqCaption)
-                    }
-                }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: ZQRounded.lg))
-        }
-    }
-
+    // MARK: - Edit Nickname Sheet
     private var editNicknameSheet: some View {
         NavigationStack {
             VStack(spacing: ZQSpacing.xl) {
@@ -255,5 +203,73 @@ struct ProfileView: View {
             }
         }
         .presentationDetents([.medium])
+    }
+}
+
+// MARK: - ProfileStatItem
+struct ProfileStatItem: View {
+    let label: String
+    let value: String
+    let icon: String
+
+    var body: some View {
+        VStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 20))
+                .foregroundColor(.primaryBlue)
+            Text(value)
+                .font(.system(size: 18, weight: .bold))
+            Text(label)
+                .font(.system(size: 12))
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - ProfileMenuItemRow
+struct ProfileMenuItemRow: View {
+    let icon: String
+    let title: String
+    var subtitle: String = ""
+    var isDanger: Bool = false
+    @State private var isPressed = false
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 18))
+                .foregroundColor(isDanger ? .red : .primaryBlue)
+                .frame(width: 24)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(isDanger ? .red : .primary)
+                if !subtitle.isEmpty {
+                    Text(subtitle)
+                        .font(.system(size: 12))
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            Spacer()
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(.secondary)
+        }
+        .padding(17)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.ultraThinMaterial)
+        )
+        .scaleEffect(isPressed ? 0.98 : 1)
+        .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
+        .pressAction {
+            withAnimation { isPressed = true }
+        } onRelease: {
+            withAnimation { isPressed = false }
+        }
     }
 }

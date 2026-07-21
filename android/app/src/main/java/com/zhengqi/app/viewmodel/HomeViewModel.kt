@@ -92,4 +92,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             refreshStats()
         }
     }
+
+    fun batchCheckIn(trackItemIds: List<Long>, note: String, imageUri: String) {
+        viewModelScope.launch {
+            val today = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+            repository.batchCheckIn(trackItemIds, today, note, imageUri)
+            refreshStats()
+        }
+    }
 }

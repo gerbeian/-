@@ -73,4 +73,40 @@ class HomeViewModel {
         try? context.save()
         loadData(context: context)
     }
+
+    func batchCheckIn(trackItemIds: [UUID], note: String, imageUri: String, context: ModelContext) {
+        let today = dateFormatter.string(from: Date())
+
+        // Load image data from file path if provided
+        var imageData: Data? = nil
+        if !imageUri.isEmpty {
+            imageData = try? Data(contentsOf: URL(fileURLWithPath: imageUri))
+        }
+
+        for itemId in trackItemIds {
+            let desc = FetchDescriptor<CheckIn>(
+                predicate: #Predicate { $0.date == today && $0.trackItem?.id == itemId }
+            )
+            let existing = (try? context.fetch(desc)) ?? []
+
+            if let checkIn = existing.first {
+                checkIn.status = true
+                checkIn.note = note
+                checkIn.imageData = imageData
+                checkIn.createdAt = Date()
+            } else {
+                let itemDesc = FetchDescriptor<TrackItem>(
+                    predicate: #Predicate { $0.id == itemId }
+                )
+                if let item = (try? context.fetch(itemDesc))?.first {
+                    let newCheckIn = CheckIn(trackItem: item, date: today, status: true)
+                    newCheckIn.note = note
+                    newCheckIn.imageData = imageData
+                    context.insert(newCheckIn)
+                }
+            }
+        }
+        try? context.save()
+        loadData(context: context)
+    }
 }

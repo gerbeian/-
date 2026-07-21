@@ -1,5 +1,6 @@
 package com.zhengqi.app.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,10 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.zhengqi.app.R
 import com.zhengqi.app.ui.components.ZhengQiButton
 import com.zhengqi.app.viewmodel.ProfileViewModel
 
@@ -37,6 +44,9 @@ fun ProfileScreen(
     val zhengQiScore by viewModel.zhengQiScore.collectAsState()
     val streak by viewModel.streak.collectAsState()
     val totalDays by viewModel.totalDays.collectAsState()
+    val exportResult by viewModel.exportResult.collectAsState()
+
+    var showClearDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.refreshStats()
@@ -75,47 +85,44 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Profile header — Action Blue tile
+            // Profile header — store-utility-card 规范（白底 + hairline 边框，无渐变）
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.large)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.large)
                     .padding(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
+                // 头像 — 圆形裁剪图片 + hairline 描边
+                Image(
+                    painter = painterResource(id = R.drawable.profile_avatar),
+                    contentDescription = "头像",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(56.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(
                         text = level,
                         style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
                         text = "正气值 $zhengQiScore · 连续 $streak 天",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Stats row
+            // Stats row — 单一 Action Blue 强调色
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -166,14 +173,14 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Default.FileDownload,
                 title = "导出数据",
-                subtitle = "将打卡数据导出为文件",
-                onClick = { /* TODO: export */ }
+                subtitle = "将打卡数据导出为 JSON 文件",
+                onClick = { viewModel.exportData() }
             )
             ProfileMenuItem(
                 icon = Icons.Default.DeleteForever,
                 title = "清除数据",
                 subtitle = "删除所有打卡记录",
-                onClick = { viewModel.deleteAllData() },
+                onClick = { showClearDialog = true },
                 isDanger = true
             )
 
@@ -195,6 +202,70 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
         }
+    }
+
+    // 导出结果提示
+    exportResult?.let { result ->
+        AlertDialog(
+            onDismissRequest = { viewModel.clearExportResult() },
+            shape = RoundedCornerShape(20.dp),
+            title = {
+                Text(
+                    text = if (result.startsWith("导出成功")) "导出成功" else "导出失败",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            text = {
+                Text(
+                    text = result,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                Button(onClick = { viewModel.clearExportResult() }) {
+                    Text("确定")
+                }
+            }
+        )
+    }
+
+    // 清除数据确认弹窗
+    if (showClearDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearDialog = false },
+            shape = RoundedCornerShape(20.dp),
+            title = {
+                Text(
+                    text = "确认清除",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.error
+                )
+            },
+            text = {
+                Text(
+                    text = "此操作将删除所有打卡记录，且不可恢复。确定要继续吗？",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteAllData()
+                        showClearDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("清除")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
     }
 }
 

@@ -11,7 +11,7 @@ class LearnViewModel {
     var favoriteArticles: [Article] = []
     var showFavorites = false
 
-    let categories = ["名言", "修心", "励志", "养生"]
+    let categories = ["名言", "修心", "励志", "养生", "戒色"]
 
     func loadData(context: ModelContext) {
         let quoteDesc = FetchDescriptor<Quote>()

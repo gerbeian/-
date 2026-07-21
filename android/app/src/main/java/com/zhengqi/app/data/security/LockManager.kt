@@ -51,9 +51,13 @@ class LockManager(context: Context) {
         return stored == pattern
     }
 
-    fun hasDigitPassword(): Boolean = prefs.getString(KEY_DIGIT_PASSWORD, null) != null
+    fun hasDigitPassword(): Boolean = !prefs.getString(KEY_DIGIT_PASSWORD, null).isNullOrEmpty()
 
-    fun hasPatternPassword(): Boolean = prefs.getString(KEY_PATTERN_PASSWORD, null) != null
+    fun hasPatternPassword(): Boolean = !prefs.getString(KEY_PATTERN_PASSWORD, null).isNullOrEmpty()
+
+    fun clearPatternPassword() {
+        prefs.edit().remove(KEY_PATTERN_PASSWORD).apply()
+    }
 
     fun disableLock() {
         isLockEnabled = false

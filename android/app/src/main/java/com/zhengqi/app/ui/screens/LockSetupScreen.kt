@@ -234,7 +234,8 @@ fun LockSetupScreen(
                             ZhengQiButton(
                                 text = "重置手势密码",
                                 onClick = {
-                                    viewModel.setPatternPassword("")
+                                    viewModel.clearPatternPassword()
+                                    setupStep = 0
                                 },
                                 modifier = Modifier.fillMaxWidth(),
                                 variant = com.zhengqi.app.ui.components.ButtonVariant.Secondary

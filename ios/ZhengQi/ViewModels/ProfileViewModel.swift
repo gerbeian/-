@@ -11,6 +11,7 @@ class ProfileViewModel {
     var zhengQiScore: Int = 0
     var allCheckIns: [CheckIn] = []
     var trackItems: [TrackItem] = []
+    var exportResult: String?
 
     @AppStorage("userNickname") var storedNickname: String = "正气少年"
     @AppStorage("lockEnabled") var lockEnabled: Bool = false
@@ -19,6 +20,12 @@ class ProfileViewModel {
     var level: (name: String, icon: String) {
         ZhengQiCalculator.getLevel(score: zhengQiScore)
     }
+
+    private let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        return f
+    }()
 
     func loadData(context: ModelContext) {
         nickname = storedNickname.isEmpty ? "正气少年" : storedNickname
@@ -30,18 +37,14 @@ class ProfileViewModel {
         trackItems = (try? context.fetch(itemDesc)) ?? []
 
         let successDates = allCheckIns.filter { $0.status }.compactMap { ci -> Date? in
-            let f = DateFormatter()
-            f.dateFormat = "yyyy-MM-dd"
-            return f.date(from: ci.date)
+            return dateFormatter.date(from: ci.date)
         }
         let uniqueSuccessDates = Set(successDates.map { Calendar.current.startOfDay(for: $0) })
         totalCheckInDays = uniqueSuccessDates.count
 
         consecutiveDays = ZhengQiCalculator.getCurrentStreak(from: allCheckIns)
 
-        let today = DateFormatter()
-        today.dateFormat = "yyyy-MM-dd"
-        let todayStr = today.string(from: Date())
+        let todayStr = dateFormatter.string(from: Date())
         let todayItems = trackItems.filter { $0.isActive }
         let todayCheckIns = allCheckIns.filter { $0.date == todayStr }
         let completedToday = todayCheckIns.filter { $0.status }.count
@@ -58,7 +61,7 @@ class ProfileViewModel {
         storedNickname = nickname
     }
 
-    func clearAllData(context: ModelContext) {
+    func deleteAllData(context: ModelContext) {
         do {
             try context.delete(model: CheckIn.self)
             try context.delete(model: TrackItem.self)
@@ -69,5 +72,45 @@ class ProfileViewModel {
         } catch {
             print("Failed to clear data: \(error)")
         }
+    }
+
+    func exportData(context: ModelContext) {
+        do {
+            let ciDesc = FetchDescriptor<CheckIn>()
+            let allCheckIns = (try? context.fetch(ciDesc)) ?? []
+
+            let itemDesc = FetchDescriptor<TrackItem>()
+            let allTrackItems = (try? context.fetch(itemDesc)) ?? []
+            let trackItemMap = Dictionary(uniqueKeysWithValues: allTrackItems.map { ($0.id, $0.name) })
+
+            var jsonArray: [[String: Any]] = []
+            for checkIn in allCheckIns {
+                var obj: [String: Any] = [
+                    "date": checkIn.date,
+                    "trackItem": trackItemMap[checkIn.trackItem?.id ?? UUID()] ?? "未知",
+                    "status": checkIn.status,
+                    "note": checkIn.note
+                ]
+                if let imageData = checkIn.imageData {
+                    obj["imageDataSize"] = imageData.count
+                }
+                jsonArray.append(obj)
+            }
+
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonArray, options: .prettyPrinted)
+            let todayStr = dateFormatter.string(from: Date())
+
+            let downloadsDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let fileURL = downloadsDir.appendingPathComponent("正气_打卡数据_\(todayStr).json")
+            try jsonData.write(to: fileURL)
+
+            exportResult = "导出成功：\(fileURL.path)"
+        } catch {
+            exportResult = "导出失败：\(error.localizedDescription)"
+        }
+    }
+
+    func clearExportResult() {
+        exportResult = nil
     }
 }

@@ -9,20 +9,26 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zhengqi.app.data.model.TrackItem
+import com.zhengqi.app.data.security.AbstinenceManager
+import com.zhengqi.app.ui.components.BatchCheckInDialog
 import com.zhengqi.app.ui.components.ProgressRing
 import com.zhengqi.app.ui.components.QuoteCard
 import com.zhengqi.app.ui.components.TrackItemIcons
@@ -36,8 +42,17 @@ import com.zhengqi.app.viewmodel.HomeViewModel
 fun HomeScreen(
     onNavigateToTrackConfig: () -> Unit,
     onNavigateToArticleDetail: (Long) -> Unit,
+    onNavigateToEmergency: () -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    val abstinenceManager = remember { AbstinenceManager(context) }
+    val abstinenceDays = abstinenceManager.getCurrentStreak()
+    val abstinenceStage = abstinenceManager.getStage()
+    val (nextMilestone, nextLabel) = abstinenceManager.getNextMilestone()
+    val abstinenceGoal = abstinenceManager.goalDays
+    var showGoalDialog by remember { mutableStateOf(false) }
+
     val trackItems by viewModel.trackItems.collectAsState()
     val todayCheckIns by viewModel.todayCheckIns.collectAsState()
     val streak by viewModel.streak.collectAsState()
@@ -46,6 +61,8 @@ fun HomeScreen(
     val completionRate by viewModel.completionRate.collectAsState()
     val dailyQuote by viewModel.dailyQuote.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+
+    var showBatchCheckInDialog by remember { mutableStateOf(false) }
 
     val animatedScore by animateIntAsState(
         targetValue = zhengQiScore,
@@ -168,12 +185,47 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Today's check-in list
-                Text(
-                    text = "今日打卡",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
+                // 戒色天数卡片
+                AbstinenceCard(
+                    days = abstinenceDays,
+                    stageLabel = abstinenceStage.label,
+                    stageDesc = abstinenceStage.description,
+                    nextMilestone = nextMilestone,
+                    nextLabel = nextLabel,
+                    goalDays = abstinenceGoal,
+                    onEmergency = onNavigateToEmergency,
+                    onSetGoal = { showGoalDialog = true }
                 )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Today's check-in list
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "今日打卡",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Button(
+                        onClick = { showBatchCheckInDialog = true },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("打卡", style = MaterialTheme.typography.labelLarge)
+                    }
+                }
                 Spacer(modifier = Modifier.height(12.dp))
 
                 trackItems.forEach { item ->
@@ -181,7 +233,7 @@ fun HomeScreen(
                     CheckInItemCard(
                         trackItem = item,
                         isChecked = isChecked,
-                        onClick = { viewModel.toggleCheckIn(item.id) }
+                        onClick = { showBatchCheckInDialog = true }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -261,9 +313,71 @@ fun HomeScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
+    }
+
+    if (showBatchCheckInDialog) {
+        BatchCheckInDialog(
+            trackItems = trackItems,
+            onDismiss = { showBatchCheckInDialog = false },
+            onConfirm = { checkedIds, note, imageUri ->
+                viewModel.batchCheckIn(checkedIds, note, imageUri)
+                showBatchCheckInDialog = false
+            }
+        )
+    }
+
+    // 戒色目标设置弹窗
+    if (showGoalDialog) {
+        var goalInput by remember { mutableStateOf(if (abstinenceGoal > 0) abstinenceGoal.toString() else "") }
+        AlertDialog(
+            onDismissRequest = { showGoalDialog = false },
+            shape = RoundedCornerShape(20.dp),
+            title = {
+                Text(
+                    text = "设置戒色目标",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            text = {
+                Column {
+                    Text(
+                        text = "设定一个目标天数，帮助你更有动力地坚持戒色。",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = goalInput,
+                        onValueChange = { if (it.isEmpty() || it.all { c -> c.isDigit() }) goalInput = it },
+                        label = { Text("目标天数") },
+                        placeholder = { Text("例如：30") },
+                        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val days = goalInput.toIntOrNull() ?: 0
+                        abstinenceManager.setGoalDays(days)
+                        showGoalDialog = false
+                    }
+                ) {
+                    Text("确定")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showGoalDialog = false }) {
+                    Text("取消")
+                }
+            }
+        )
     }
 }
 
@@ -361,5 +475,133 @@ private fun StatCard(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+    }
+}
+
+@Composable
+private fun AbstinenceCard(
+    days: Int,
+    stageLabel: String,
+    stageDesc: String,
+    nextMilestone: Int,
+    nextLabel: String,
+    goalDays: Int,
+    onEmergency: () -> Unit,
+    onSetGoal: () -> Unit
+) {
+    val progress = if (goalDays > 0) (days.toFloat() / goalDays).coerceIn(0f, 1f)
+        else if (nextMilestone > 0) (days.toFloat() / nextMilestone).coerceIn(0f, 1f)
+        else 0f
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(20.dp)
+    ) {
+        // 标题行
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "戒色天数",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+                    text = stageDesc,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            // 应急按钮
+            Button(
+                onClick = onEmergency,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Icon(
+                    Icons.Default.Shield,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = "应急",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 天数展示
+        Row(
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "$days",
+                style = MaterialTheme.typography.displayLarge.copy(fontSize = 48.sp),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "天",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 6.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = stageLabel,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                if (goalDays > 0) {
+                    Text(
+                        text = "目标 ${goalDays}天 · 已完成 ${(progress * 100).toInt()}%",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else if (nextMilestone > 0) {
+                    Text(
+                        text = "距离「${nextLabel}」${nextMilestone - days}天",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                // 设置目标按钮
+                TextButton(
+                    onClick = onSetGoal,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                ) {
+                    Text(
+                        text = if (goalDays > 0) "修改目标" else "设置目标",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+        }
+
+        // 进度条
+        if (nextMilestone > 0) {
+            Spacer(modifier = Modifier.height(12.dp))
+            LinearProgressIndicator(
+                progress = { progress.coerceIn(0f, 1f) },
+                modifier = Modifier.fillMaxWidth().height(4.dp),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+            )
+        }
     }
 }

@@ -46,6 +46,10 @@ class LockViewModel(application: Application) : AndroidViewModel(application) {
 
     fun hasPatternPassword(): Boolean = lockManager.hasPatternPassword()
 
+    fun clearPatternPassword() {
+        lockManager.clearPatternPassword()
+    }
+
     fun unlock() {
         _isLocked.value = false
     }
