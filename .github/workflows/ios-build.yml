@@ -58,6 +58,12 @@ jobs:
           fi
           exit $EXIT_CODE
 
+      - name: Show build errors
+        if: failure()
+        run: |
+          echo "=== BUILD ERRORS ==="
+          grep -A 3 "error:" ${{ github.workspace }}/build/xcodebuild.log | head -60
+
       - name: Upload build log
         if: failure()
         uses: actions/upload-artifact@v4
