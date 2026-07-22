@@ -1,4 +1,4 @@
-pluginManagement {
+﻿pluginManagement {
     repositories {
         google {
             content {
@@ -20,5 +20,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ZhengQi"
+rootProject.name = "zhiguan"
+include(":core")
 include(":app")
+include(":wear")

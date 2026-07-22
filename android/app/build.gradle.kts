@@ -1,9 +1,8 @@
-import java.util.Properties
+﻿import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -13,11 +12,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.zhengqi.app"
+    namespace = "com.zhiguan.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.zhengqi.app"
+        applicationId = "com.zhiguan.app"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -71,6 +70,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -83,12 +83,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.datastore.preferences)
     implementation(libs.coil.compose)
     implementation(libs.mpandroidchart)
-    implementation(libs.androidx.security.crypto)
     debugImplementation(libs.androidx.ui.tooling)
 }
